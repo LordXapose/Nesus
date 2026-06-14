@@ -1,4 +1,4 @@
-# NEXUS TERMINAL — Institutional-Grade Financial & Tracking Suite
+# NEXUS TERMINAL Institutional-Grade Financial & Tracking Suite
 
 **NEXUS TERMINAL** is a full‑screen, Bloomberg‑style web application that integrates:
 
@@ -10,7 +10,7 @@
 - AI‑powered analyst assistant
 - News & macro economic calendar
 
-> **⚠️ Demo / Mock Data** – All data is simulated for demonstration purposes. No API keys or backend required. Runs entirely in the browser.
+> ** Demo / Mock Data** – All data is simulated for demonstration purposes. No API keys or backend required. Runs entirely in the browser.
 
 ---
 
@@ -32,7 +32,7 @@
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - A modern web browser (Chrome, Firefox, Edge, Safari)
@@ -40,7 +40,7 @@
 
 ### Installation
 1. **Clone or download** this repository.
-2. **Open `index.html`** in your browser – no build step or server required.
+2. **Open `index.html`** in your browser no build step or server required.
 
 ```bash
 git clone https://github.com/yourusername/nexus-terminal.git
