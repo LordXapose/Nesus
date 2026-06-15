@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NEXUS v5 — Developer Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #07080a;
+  --bg2:      #0d0f12;
+  --bg3:      #12151a;
+  --bg4:      #181c22;
+  --border:   #1e2530;
+  --border2:  #2a3340;
+  --amber:    #f5a623;
+  --amber2:   #ffc045;
+  --green:    #00d68f;
+  --red:      #ff4560;
+  --blue:     #00b4d8;
+  --purple:   #9d4edd;
+  --text:     #c8d6e5;
+  --text2:    #8899aa;
+  --text3:    #4a5568;
+  --text4:    #2a3340;
+  --mono:     'Share Tech Mono', monospace;
+  --display:  'Orbitron', monospace;
+  --body:     'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border2);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: var(--bg2); }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+.sb-logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border2);
+  flex-shrink: 0;
+}
+.sb-logo-title {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--amber);
+  letter-spacing: 4px;
+}
+.sb-logo-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+.sb-version {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  color: var(--amber);
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-top: 8px;
+}
+
+.sb-section {
+  padding: 14px 20px 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.sb-link {
+  display: block;
+  padding: 7px 20px 7px 24px;
+  font-size: 12px;
+  color: var(--text2);
+  text-decoration: none;
+  transition: all 0.12s;
+  border-left: 2px solid transparent;
+  font-family: var(--mono);
+  letter-spacing: 0.5px;
+}
+.sb-link:hover {
+  color: var(--amber);
+  background: var(--bg3);
+  border-left-color: var(--amber);
+}
+.sb-link.active {
+  color: var(--amber);
+  border-left-color: var(--amber);
+  background: var(--bg3);
+}
+.sb-link.sub {
+  padding-left: 36px;
+  font-size: 11px;
+  color: var(--text3);
+}
+.sb-link.sub:hover { color: var(--text); border-left-color: var(--border2); }
+
+.sb-footer {
+  margin-top: auto;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border2);
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+}
+
+/* ── MAIN CONTENT ── */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 60px 80px;
+  max-width: 900px;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 48px 0 40px;
+  border-bottom: 1px solid var(--border2);
+  margin-bottom: 48px;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+.hero-title {
+  font-family: var(--display);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--amber);
+  letter-spacing: 6px;
+  line-height: 1.1;
+}
+.hero-sub {
+  font-family: var(--display);
+  font-size: 13px;
+  color: var(--text2);
+  letter-spacing: 3px;
+  margin-top: 8px;
+}
+.hero-desc {
+  margin-top: 20px;
+  color: var(--text2);
+  font-size: 14px;
+  max-width: 620px;
+  line-height: 1.8;
+}
+.hero-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 2px;
+  border: 1px solid;
+  letter-spacing: 1px;
+}
+.badge-green { border-color: var(--green); color: var(--green); }
+.badge-amber { border-color: var(--amber); color: var(--amber); }
+.badge-blue  { border-color: var(--blue);  color: var(--blue); }
+.badge-red   { border-color: var(--red);   color: var(--red); }
+
+/* ── SECTIONS ── */
+section { margin-bottom: 56px; }
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 3px;
+  margin-bottom: 6px;
+}
+h2 {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--amber);
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border2);
+}
+h3 {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: 1.5px;
+  margin: 28px 0 10px;
+}
+h4 {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+  letter-spacing: 1px;
+  margin: 18px 0 6px;
+}
+
+p { color: var(--text2); margin-bottom: 12px; font-size: 14px; }
+
+/* ── CODE BLOCKS ── */
+pre {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--amber);
+  border-radius: 2px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  margin: 14px 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+}
+pre::-webkit-scrollbar { height: 4px; }
+pre::-webkit-scrollbar-track { background: var(--bg2); }
+pre::-webkit-scrollbar-thumb { background: var(--border2); }
+
+code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 2px;
+  color: var(--amber2);
+}
+pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--text);
+}
+
+.c-key   { color: var(--amber); }
+.c-str   { color: var(--green); }
+.c-com   { color: var(--text3); font-style: italic; }
+.c-fn    { color: var(--blue); }
+.c-num   { color: var(--purple); }
+.c-kw    { color: var(--red); }
+
+/* ── TABLES ── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 12px;
+  font-family: var(--mono);
+}
+th {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  padding: 8px 12px;
+  text-align: left;
+  color: var(--amber);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+td {
+  border: 1px solid var(--border);
+  padding: 7px 12px;
+  color: var(--text2);
+  vertical-align: top;
+}
+tr:hover td { background: var(--bg3); }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border: 1px solid;
+  border-radius: 2px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.callout-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.callout-info  { border-color: var(--blue);  background: rgba(0,180,216,0.06); }
+.callout-info  .callout-title { color: var(--blue); }
+.callout-warn  { border-color: var(--amber); background: rgba(245,166,35,0.06); }
+.callout-warn  .callout-title { color: var(--amber); }
+.callout-ok    { border-color: var(--green); background: rgba(0,214,143,0.06); }
+.callout-ok    .callout-title { color: var(--green); }
+.callout-error { border-color: var(--red);   background: rgba(255,69,96,0.06); }
+.callout-error .callout-title { color: var(--red); }
+.callout p { margin: 0; color: var(--text2); }
+
+/* ── MODULE CARDS ── */
+.module-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+.module-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  padding: 14px 16px;
+}
+.module-card-id {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+.module-card-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--amber);
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+.module-card-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+.module-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 1px 7px;
+  border-radius: 2px;
+  margin-top: 8px;
+  border: 1px solid var(--border2);
+  color: var(--text3);
+}
+.module-tag.lazy { border-color: var(--blue); color: var(--blue); }
+.module-tag.live { border-color: var(--green); color: var(--green); }
+.module-tag.new  { border-color: var(--amber); color: var(--amber); }
+
+/* ── API CARDS ── */
+.api-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--amber);
+  margin: 14px 0;
+  overflow: hidden;
+}
+.api-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.api-card-name {
+  font-family: var(--display);
+  font-size: 13px;
+  color: var(--amber);
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+.api-card-url {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+}
+.api-card-tier {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+.api-card-body {
+  padding: 14px 18px;
+}
+.api-card-body p { font-size: 13px; margin-bottom: 10px; }
+
+/* ── STEP LIST ── */
+.steps { counter-reset: step; list-style: none; margin: 14px 0; }
+.steps li {
+  counter-increment: step;
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.steps li:last-child { border-bottom: none; }
+.step-num {
+  font-family: var(--display);
+  font-size: 11px;
+  color: var(--bg);
+  background: var(--amber);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 900;
+  content: counter(step);
+  margin-top: 2px;
+}
+.step-body { flex: 1; }
+.step-title { font-family: var(--mono); font-size: 12px; color: var(--text); margin-bottom: 4px; letter-spacing: 0.5px; }
+.step-desc  { font-size: 13px; color: var(--text2); }
+
+/* ── INLINE DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border2);
+  margin: 32px 0;
+}
+
+/* ── ANCHOR OFFSET ── */
+[id] { scroll-margin-top: 24px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { padding: 0 24px 60px; }
+  .module-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-title">NEXUS</div>
+    <div class="sb-logo-sub">DEVELOPER DOCUMENTATION</div>
+    <div class="sb-version">v5.0 — SINGLE FILE</div>
+  </div>
+
+  <div class="sb-section">Getting Started</div>
+  <a class="sb-link" href="#overview">Overview</a>
+  <a class="sb-link" href="#quickstart">Quick Start</a>
+  <a class="sb-link" href="#dependencies">Dependencies</a>
+
+  <div class="sb-section">Architecture</div>
+  <a class="sb-link" href="#structure">File Structure</a>
+  <a class="sb-link" href="#modules">Module System</a>
+  <a class="sb-link" href="#design-system">Design System</a>
+
+  <div class="sb-section">Modules</div>
+  <a class="sb-link" href="#mod-home">Overview</a>
+  <a class="sb-link" href="#mod-dashboard">Dashboard</a>
+  <a class="sb-link" href="#mod-orderbook">Order Book</a>
+  <a class="sb-link" href="#mod-tracking">Live Tracking</a>
+  <a class="sb-link" href="#mod-risk">Aladdin Risk</a>
+  <a class="sb-link" href="#mod-news">News & Macro</a>
+  <a class="sb-link" href="#mod-options">Options Chain</a>
+  <a class="sb-link" href="#mod-darkpool">Dark Pool</a>
+  <a class="sb-link" href="#mod-macroheat">Macro Heat Map</a>
+  <a class="sb-link" href="#mod-correlation">Correlation Lab</a>
+
+  <div class="sb-section">API Setup</div>
+  <a class="sb-link" href="#api-config">Configuration</a>
+  <a class="sb-link" href="#api-polygon">Polygon.io</a>
+  <a class="sb-link" href="#api-alphavantage">Alpha Vantage</a>
+  <a class="sb-link" href="#api-coingecko">CoinGecko</a>
+  <a class="sb-link" href="#api-fred">FRED</a>
+  <a class="sb-link" href="#api-opensky">OpenSky</a>
+  <a class="sb-link" href="#api-marinetraffic">MarineTraffic</a>
+
+  <div class="sb-section">Reference</div>
+  <a class="sb-link" href="#functions">Key Functions</a>
+  <a class="sb-link" href="#css-vars">CSS Variables</a>
+  <a class="sb-link" href="#extending">Adding Modules</a>
+  <a class="sb-link" href="#troubleshooting">Troubleshooting</a>
+
+  <div class="sb-footer">
+    NEXUS v5.0 — Single-file terminal<br>
+    Built with vanilla JS + Chart.js + Leaflet
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero" id="overview">
+    <div class="hero-eyebrow">DEVELOPER DOCUMENTATION</div>
+    <div class="hero-title">NEXUS</div>
+    <div class="hero-sub">UNIFIED FINANCIAL TERMINAL — v5.0</div>
+    <p class="hero-desc">
+      Nexus is a self-contained, single-file Bloomberg-style financial terminal built in vanilla JavaScript.
+      No build step, no framework, no backend required — open the HTML file in any browser and it runs.
+      This document covers every module, the API integration layer, the design system, and how to extend the terminal with new panels.
+    </p>
+    <div class="hero-badges">
+      <span class="badge badge-green">SINGLE FILE</span>
+      <span class="badge badge-amber">10 MODULES</span>
+      <span class="badge badge-blue">6 API SOURCES</span>
+      <span class="badge badge-red">DEMO MODE — NO KEY REQUIRED</span>
+    </div>
+  </div>
+
+  <!-- QUICK START -->
+  <section id="quickstart">
+    <div class="section-label">GETTING STARTED</div>
+    <h2>QUICK START</h2>
+    <p>
+      Nexus ships as a single <code>Nexus_v5.html</code> file. There is no install process.
+      In demo mode (default) all data is procedurally generated — no API keys are needed.
+    </p>
+    <ol class="steps">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">OPEN THE FILE</div>
+          <div class="step-desc">Double-click <code>Nexus_v5.html</code> or drag it into Chrome, Firefox, or Safari. The terminal boots immediately — no server needed.</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">EXPLORE DEMO MODE</div>
+          <div class="step-desc">All 10 modules work out of the box with simulated data. The status bar shows <code>DEMO — MOCK DATA</code>. Prices refresh every 2.5 seconds, maps animate, the dark pool tape streams live.</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">ADD API KEYS (OPTIONAL)</div>
+          <div class="step-desc">Open the file in a text editor. Find the <code>NEXUS_API</code> object near the bottom of the <code>&lt;script&gt;</code> tag. Replace <code>'DEMO'</code> with real keys to activate live data. See the API Setup section for each provider.</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">UNCOMMENT REAL API CALLS</div>
+          <div class="step-desc">Each module that supports live data has a commented-out real API call sitting directly above the demo data fallback. Uncomment it and delete the mock generator call below it.</div>
+        </div>
+      </li>
+    </ol>
+
+    <div class="callout callout-info">
+      <div class="callout-title">NOTE — LOCAL FILE CORS</div>
+      <p>When opened as a local file (<code>file:///</code>), browsers block cross-origin fetch requests. To use real API calls, either host the file on any HTTP server (<code>python3 -m http.server 8080</code>) or use a browser extension that disables CORS for local development.</p>
+    </div>
+  </section>
+
+  <!-- DEPENDENCIES -->
+  <section id="dependencies">
+    <div class="section-label">GETTING STARTED</div>
+    <h2>DEPENDENCIES</h2>
+    <p>Nexus loads three external libraries from CDN. All are loaded in the <code>&lt;head&gt;</code>. No npm, no bundler.</p>
+    <table>
+      <thead><tr><th>LIBRARY</th><th>VERSION</th><th>PURPOSE</th><th>CDN</th></tr></thead>
+      <tbody>
+        <tr><td>Chart.js</td><td>4.4.0</td><td>All line, bar, doughnut, radar, and scatter charts across every module</td><td>cdnjs.cloudflare.com</td></tr>
+        <tr><td>Leaflet.js</td><td>1.9.4</td><td>Interactive maps in the Aircraft, Vessel, and Traffic tracking modules</td><td>cdnjs.cloudflare.com</td></tr>
+        <tr><td>Google Fonts</td><td>—</td><td>Orbitron (display/logo) and Share Tech Mono (monospace UI)</td><td>fonts.googleapis.com</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-warn">
+      <div class="callout-title">OFFLINE USE</div>
+      <p>If you need the terminal to work offline, download Chart.js and Leaflet locally and update the <code>&lt;script&gt;</code> and <code>&lt;link&gt;</code> tags to point to the local files. The Google Fonts can be replaced with system monospace fonts by editing <code>--mono</code> and <code>--display</code> in the CSS variables.</p>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- STRUCTURE -->
+  <section id="structure">
+    <div class="section-label">ARCHITECTURE</div>
+    <h2>FILE STRUCTURE</h2>
+    <p>The entire terminal lives in one HTML file. The internal structure is divided into four logical blocks:</p>
+    <pre><code><span class="c-com">Nexus_v5.html</span>
+<span class="c-com">|</span>
+<span class="c-com">+-- &lt;head&gt;</span>
+<span class="c-com">|   +-- CSS Variables (design tokens)</span>
+<span class="c-com">|   +-- Component styles (topbar, nav, modules, overlays)</span>
+<span class="c-com">|   +-- Module-specific styles (one block per module)</span>
+<span class="c-com">|</span>
+<span class="c-com">+-- &lt;body&gt;</span>
+<span class="c-com">|   +-- .topbar       (logo, ticker tape, AI button, alerts)</span>
+<span class="c-com">|   +-- .master-nav   (all tab buttons, clock, LIVE indicator)</span>
+<span class="c-com">|   +-- .app          (container for all module panels)</span>
+<span class="c-com">|       +-- #home, #dashboard, #orderbook, #news</span>
+<span class="c-com">|       +-- #tracking, #aircraft, #vessels</span>
+<span class="c-com">|       +-- #risk</span>
+<span class="c-com">|       +-- #options, #darkpool, #macroheat, #correlation</span>
+<span class="c-com">|   +-- Overlay panels (AI modal, alerts panel, portfolio editor)</span>
+<span class="c-com">|</span>
+<span class="c-com">+-- &lt;script&gt;</span>
+<span class="c-com">    +-- NEXUS_API config object</span>
+<span class="c-com">    +-- Utility functions (rnd, rndInt, pick, mkChart, nexusFetch)</span>
+<span class="c-com">    +-- Shared data (DASH_ASSETS, PORTFOLIO_D)</span>
+<span class="c-com">    +-- Module init functions (one per module)</span>
+<span class="c-com">    +-- switchModule() — central router</span>
+<span class="c-com">    +-- DOMContentLoaded boot block</span></code></pre>
+  </section>
+
+  <!-- MODULE SYSTEM -->
+  <section id="modules">
+    <div class="section-label">ARCHITECTURE</div>
+    <h2>MODULE SYSTEM</h2>
+    <p>
+      Modules are <code>div.module</code> elements. Only one is visible at a time — controlled by the <code>active</code> class.
+      All modules use <strong>lazy initialization</strong>: they only boot when first clicked, not on page load. This keeps startup time fast regardless of how many modules exist.
+    </p>
+
+    <h3>HOW SWITCHING WORKS</h3>
+    <pre><code><span class="c-fn">switchModule</span>(<span class="c-str">'dashboard'</span>, btn)
+<span class="c-com">// 1. Removes .active from all .module divs</span>
+<span class="c-com">// 2. Adds .active to #dashboard</span>
+<span class="c-com">// 3. Sets currentModule = 'dashboard'</span>
+<span class="c-com">// 4. If not yet initialized, calls initDashboard()</span></code></pre>
+
+    <h3>INITIALIZATION FLAGS</h3>
+    <p>Each module has a boolean flag that prevents double-initialization:</p>
+    <pre><code><span class="c-kw">let</span> dashInitialized = <span class="c-kw">false</span>;
+<span class="c-kw">let</span> obInitialized   = <span class="c-kw">false</span>;
+<span class="c-kw">let</span> mapInitialized  = <span class="c-kw">false</span>;
+<span class="c-kw">let</span> riskInitialized = <span class="c-kw">false</span>;
+<span class="c-kw">let</span> optInitialized  = <span class="c-kw">false</span>;
+<span class="c-kw">let</span> dpInitialized   = <span class="c-kw">false</span>;
+<span class="c-kw">let</span> mhInitialized   = <span class="c-kw">false</span>;
+<span class="c-kw">let</span> corrInitialized = <span class="c-kw">false</span>;</code></pre>
+
+    <h3>LIVE REFRESH PATTERN</h3>
+    <p>Modules that animate or stream data use <code>setInterval</code> guarded by <code>currentModule</code> to avoid running in the background:</p>
+    <pre><code><span class="c-fn">setInterval</span>(() => {
+  <span class="c-kw">if</span> (currentModule === <span class="c-str">'dashboard'</span>) {
+    <span class="c-com">// only update when module is visible</span>
+    DASH_ASSETS.<span class="c-fn">forEach</span>(s => { s.price = <span class="c-fn">simulatePrice</span>(s); });
+    <span class="c-fn">buildWatchlist</span>();
+  }
+}, <span class="c-num">2500</span>);</code></pre>
+  </section>
+
+  <!-- DESIGN SYSTEM -->
+  <section id="design-system">
+    <div class="section-label">ARCHITECTURE</div>
+    <h2>DESIGN SYSTEM</h2>
+    <p>All visual tokens are defined as CSS custom properties at the top of the <code>&lt;style&gt;</code> block. Changing a variable updates every component that uses it.</p>
+
+    <h3>COLOR PALETTE</h3>
+    <table>
+      <thead><tr><th>VARIABLE</th><th>VALUE</th><th>USAGE</th></tr></thead>
+      <tbody>
+        <tr><td><code>--bg</code></td><td>#07080a</td><td>Page background, deepest layer</td></tr>
+        <tr><td><code>--bg2</code></td><td>#0d0f12</td><td>Panel backgrounds, sidebar, topbar</td></tr>
+        <tr><td><code>--bg3</code></td><td>#12151a</td><td>Hover states, box headers</td></tr>
+        <tr><td><code>--bg4</code></td><td>#181c22</td><td>Table headers, nested elements</td></tr>
+        <tr><td><code>--bg5</code></td><td>#1e2530</td><td>Deepest nested backgrounds</td></tr>
+        <tr><td><code>--border</code></td><td>#1e2530</td><td>Subtle dividers between elements</td></tr>
+        <tr><td><code>--border2</code></td><td>#2a3340</td><td>Panel borders, input outlines</td></tr>
+        <tr><td><code>--amber</code></td><td>#f5a623</td><td>Primary accent — logos, highlights, active states</td></tr>
+        <tr><td><code>--green</code></td><td>#00d68f</td><td>Positive values, bullish sentiment, live indicator</td></tr>
+        <tr><td><code>--red</code></td><td>#ff4560</td><td>Negative values, bearish sentiment, alerts</td></tr>
+        <tr><td><code>--blue</code></td><td>#00b4d8</td><td>Informational, neutral data points</td></tr>
+        <tr><td><code>--purple</code></td><td>#9d4edd</td><td>Implied volatility, secondary accent</td></tr>
+        <tr><td><code>--text</code></td><td>#c8d6e5</td><td>Primary body text</td></tr>
+        <tr><td><code>--text2</code></td><td>#8899aa</td><td>Secondary labels, descriptions</td></tr>
+        <tr><td><code>--text3</code></td><td>#4a5568</td><td>Muted labels, disabled states</td></tr>
+      </tbody>
+    </table>
+
+    <h3>TYPOGRAPHY</h3>
+    <table>
+      <thead><tr><th>ROLE</th><th>FONT</th><th>USAGE</th></tr></thead>
+      <tbody>
+        <tr><td>Display</td><td>Orbitron 700/900</td><td>Logo, module headings, KPI values, chart labels</td></tr>
+        <tr><td>Monospace UI</td><td>Share Tech Mono</td><td>All data tables, tickers, inputs, nav tabs, prices</td></tr>
+      </tbody>
+    </table>
+
+    <h3>UTILITY CLASSES</h3>
+    <table>
+      <thead><tr><th>CLASS</th><th>EFFECT</th></tr></thead>
+      <tbody>
+        <tr><td><code>.up</code></td><td>Colors text <code>var(--green)</code> — use for positive price changes</td></tr>
+        <tr><td><code>.dn</code></td><td>Colors text <code>var(--red)</code> — use for negative price changes</td></tr>
+        <tr><td><code>.warn</code></td><td>Colors text <code>var(--amber)</code> — use for warnings or highlights</td></tr>
+        <tr><td><code>.module</code></td><td>Base panel class — hidden by default, shown when <code>.active</code></td></tr>
+        <tr><td><code>.box</code></td><td>Standard dark card with border</td></tr>
+        <tr><td><code>.bh</code></td><td>Box header bar (amber title + optional subtitle)</td></tr>
+        <tr><td><code>.drow</code></td><td>Data row — two-column label/value layout</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- MODULES -->
+  <section id="mod-home">
+    <div class="section-label">MODULES</div>
+    <h2>MODULE REFERENCE</h2>
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="module-card-id">ID: home</div>
+        <div class="module-card-name">OVERVIEW</div>
+        <div class="module-card-desc">Landing screen. 6 clickable cards that navigate to key modules. SPX/VIX/DXY/BTC live bar. Refreshes on every visit via <code>buildHomeMkt()</code>.</div>
+        <span class="module-tag live">LIVE REFRESH</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: dashboard</div>
+        <div class="module-card-name">DASHBOARD</div>
+        <div class="module-card-desc">Full trading interface. Watchlist, candlestick/OHLCV chart, portfolio P&L, asset screener with RSI and MA signals. 25 assets including stocks, forex, crypto, and commodities.</div>
+        <span class="module-tag lazy">LAZY INIT</span>
+        <span class="module-tag live">2.5s TICK</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: orderbook</div>
+        <div class="module-card-name">ORDER BOOK</div>
+        <div class="module-card-desc">Level 2 depth-of-market. Bid/ask ladders with depth bars, live trade tape, spread display, and 5 sub-views (Book, Trades, Depth Chart, Portfolio, Time & Sales).</div>
+        <span class="module-tag lazy">LAZY INIT</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: tracking / aircraft / vessels</div>
+        <div class="module-card-name">LIVE TRACKING</div>
+        <div class="module-card-desc">Three Leaflet map modules sharing one architecture: 80 aircraft with flight paths, 120 vessels on ocean lanes, combined traffic view. Custom dark-themed map tiles.</div>
+        <span class="module-tag lazy">LAZY INIT</span>
+        <span class="module-tag live">4s TICK</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: risk</div>
+        <div class="module-card-name">ALADDIN RISK</div>
+        <div class="module-card-desc">4-tab risk suite: Portfolio overview with factor attribution, Stress testing (7 scenarios), Compliance breach monitoring, Monte Carlo simulation (1000 paths).</div>
+        <span class="module-tag lazy">LAZY INIT</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: news</div>
+        <div class="module-card-name">NEWS & MACRO</div>
+        <div class="module-card-desc">3-panel news dashboard: curated market headlines, economic calendar (CPI, NFP, GDP, FOMC), and central bank policy tracker for Fed, ECB, BoE, BoJ, and PBOC.</div>
+        <span class="module-tag lazy">LAZY INIT</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: options</div>
+        <div class="module-card-name">OPTIONS CHAIN</div>
+        <div class="module-card-desc">Full call/put ladder with bid, ask, IV, delta, volume, and OI. ITM row highlighting, filter by moneyness, sort by any column, live IV tick every 3s. KPI bar shows IV Rank, P/C ratio, max pain.</div>
+        <span class="module-tag new">NEW v5</span>
+        <span class="module-tag live">3s IV TICK</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: darkpool</div>
+        <div class="module-card-name">DARK POOL</div>
+        <div class="module-card-desc">Live options flow tape: sweeps, block trades, calls and puts with bullish/bearish/neutral tagging. Sector heat map, top movers by premium, filter bar. New trade injected every 4s.</div>
+        <span class="module-tag new">NEW v5</span>
+        <span class="module-tag live">4s STREAM</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: macroheat</div>
+        <div class="module-card-name">MACRO HEAT MAP</div>
+        <div class="module-card-desc">20 countries colored by 5 macro metrics: GDP growth, CPI inflation, policy rate, unemployment, and debt/GDP. Click any country for a full breakdown and auto-generated macro comment.</div>
+        <span class="module-tag new">NEW v5</span>
+      </div>
+      <div class="module-card">
+        <div class="module-card-id">ID: correlation</div>
+        <div class="module-card-name">CORRELATION LAB</div>
+        <div class="module-card-desc">Add up to 8 tickers, select a rolling window (20/30/60/90D), compute a color-coded N x N correlation matrix. Key pair insights, rolling chart, and a portfolio diversification score out of 100.</div>
+        <span class="module-tag new">NEW v5</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- API CONFIG -->
+  <section id="api-config">
+    <div class="section-label">API SETUP</div>
+    <h2>API CONFIGURATION</h2>
+    <p>
+      All API keys live in one object at the top of the <code>&lt;script&gt;</code> block.
+      Find it by searching the file for <code>NEXUS_API</code>.
+    </p>
+    <pre><code><span class="c-com">// ---- LOCATE THIS BLOCK IN Nexus_v5.html ----</span>
+<span class="c-kw">const</span> <span class="c-key">NEXUS_API</span> = {
+  <span class="c-key">polygon</span>:      <span class="c-str">'YOUR_POLYGON_KEY'</span>,      <span class="c-com">// stocks, options, forex</span>
+  <span class="c-key">alphavantage</span>: <span class="c-str">'YOUR_ALPHAVANTAGE_KEY'</span>, <span class="c-com">// macro indicators, FX</span>
+  <span class="c-key">coingecko</span>:    <span class="c-str">''</span>,                      <span class="c-com">// crypto (no key needed)</span>
+  <span class="c-key">fred</span>:         <span class="c-str">'YOUR_FRED_KEY'</span>,         <span class="c-com">// economic data</span>
+};</code></pre>
+
+    <h3>NEXUSFETCH — THE API HELPER</h3>
+    <p>Every real API call goes through <code>nexusFetch()</code>. It adds a 5-second timeout and automatically falls back to mock data if the request fails, so the terminal never breaks even with an invalid key.</p>
+    <pre><code><span class="c-kw">async function</span> <span class="c-fn">nexusFetch</span>(url, fallbackData) {
+  <span class="c-kw">try</span> {
+    <span class="c-kw">const</span> ctrl = <span class="c-kw">new</span> <span class="c-fn">AbortController</span>();
+    <span class="c-kw">const</span> tid  = <span class="c-fn">setTimeout</span>(() => ctrl.<span class="c-fn">abort</span>(), <span class="c-num">5000</span>);
+    <span class="c-kw">const</span> r    = <span class="c-kw">await</span> <span class="c-fn">fetch</span>(url, { signal: ctrl.signal });
+    <span class="c-fn">clearTimeout</span>(tid);
+    <span class="c-kw">if</span> (!r.ok) <span class="c-kw">throw new</span> <span class="c-fn">Error</span>(<span class="c-str">'HTTP '</span> + r.status);
+    <span class="c-kw">return await</span> r.<span class="c-fn">json</span>();
+  } <span class="c-kw">catch</span> (e) {
+    console.<span class="c-fn">warn</span>(<span class="c-str">'[NEXUS] falling back to demo data:'</span>, e.message);
+    <span class="c-kw">return</span> fallbackData; <span class="c-com">// terminal keeps working</span>
+  }
+}</code></pre>
+
+    <h3>HOW TO ACTIVATE A REAL API CALL</h3>
+    <p>Each module has a commented-out real call sitting above its mock generator. The pattern is always the same:</p>
+    <pre><code><span class="c-com">// --- BEFORE (demo mode) ---</span>
+<span class="c-com">// const url = `https://api.polygon.io/v2/aggs/ticker/${sym}/...`;</span>
+<span class="c-com">// const data = await nexusFetch(url, null);</span>
+<span class="c-com">// if (data && data.results) { /* parse */ }</span>
+
+<span class="c-key">optionsData</span> = <span class="c-fn">genOptionsChain</span>(sym, price); <span class="c-com">// &lt;-- DELETE THIS LINE</span>
+
+<span class="c-com">// --- AFTER (live mode) ---</span>
+<span class="c-kw">const</span> url  = `https://api.polygon.io/v2/aggs/ticker/${sym}/...`;
+<span class="c-kw">const</span> data = <span class="c-kw">await</span> <span class="c-fn">nexusFetch</span>(url, <span class="c-kw">null</span>);
+<span class="c-kw">if</span> (data && data.results) {
+  optionsData = <span class="c-fn">parsePolygonOptions</span>(data.results);
+}</code></pre>
+  </section>
+
+  <!-- POLYGON -->
+  <section id="api-polygon">
+    <div class="section-label">API PROVIDERS</div>
+    <h2>POLYGON.IO</h2>
+    <div class="api-card">
+      <div class="api-card-header">
+        <div>
+          <div class="api-card-name">POLYGON.IO</div>
+          <div class="api-card-url">api.polygon.io</div>
+        </div>
+        <div class="api-card-tier">FREE TIER AVAILABLE</div>
+      </div>
+      <div class="api-card-body">
+        <p>The primary data source for stocks, forex, and crypto. Covers the Dashboard (watchlist prices, chart history), Options Chain (contract data, greeks), and Correlation Lab (historical OHLCV bars). Free tier provides 15-minute delayed US equity quotes and unlimited historical daily bars.</p>
+        <h4>SIGNUP</h4>
+        <pre><code>https://polygon.io/dashboard/signup</code></pre>
+        <h4>KEY ENDPOINTS USED</h4>
+        <table>
+          <thead><tr><th>MODULE</th><th>ENDPOINT</th><th>DATA</th></tr></thead>
+          <tbody>
+            <tr><td>Dashboard</td><td><code>/v2/aggs/ticker/{sym}/prev</code></td><td>Previous day OHLCV</td></tr>
+            <tr><td>Dashboard Chart</td><td><code>/v2/aggs/ticker/{sym}/range/1/day/{from}/{to}</code></td><td>Historical bars</td></tr>
+            <tr><td>Options Chain</td><td><code>/v3/reference/options/contracts</code></td><td>Options contracts list</td></tr>
+            <tr><td>Options Quotes</td><td><code>/v3/quotes/{optionsTicker}</code></td><td>Live bid/ask/IV</td></tr>
+            <tr><td>Correlation Lab</td><td><code>/v2/aggs/ticker/{sym}/range/1/day/{from}/{to}</code></td><td>30/60/90D price history</td></tr>
+          </tbody>
+        </table>
+        <h4>INTEGRATION EXAMPLE</h4>
+        <pre><code><span class="c-com">// Fetch previous day's OHLCV for a symbol</span>
+<span class="c-kw">const</span> data = <span class="c-kw">await</span> <span class="c-fn">nexusFetch</span>(
+  `https://api.polygon.io/v2/aggs/ticker/AAPL/prev?apiKey=${NEXUS_API.polygon}`,
+  <span class="c-kw">null</span>
+);
+<span class="c-kw">if</span> (data?.results?.[<span class="c-num">0</span>]) {
+  <span class="c-kw">const</span> bar = data.results[<span class="c-num">0</span>];
+  asset.price = bar.c;   <span class="c-com">// close</span>
+  asset.open  = bar.o;   <span class="c-com">// open</span>
+  asset.high  = bar.h;   <span class="c-com">// high</span>
+  asset.low   = bar.l;   <span class="c-com">// low</span>
+  asset.vol   = bar.v;   <span class="c-com">// volume</span>
+}</code></pre>
+        <div class="callout callout-info">
+          <div class="callout-title">WEBSOCKET STREAMING</div>
+          <p>Polygon's free tier includes WebSocket access for real-time quote streaming. Connect to <code>wss://socket.polygon.io/stocks</code>, authenticate with your key, and subscribe to <code>Q.*</code> (quotes) or <code>T.*</code> (trades). This enables true live price updates in the ticker and watchlist instead of polling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALPHA VANTAGE -->
+  <section id="api-alphavantage">
+    <div class="section-label">API PROVIDERS</div>
+    <h2>ALPHA VANTAGE</h2>
+    <div class="api-card">
+      <div class="api-card-header">
+        <div>
+          <div class="api-card-name">ALPHA VANTAGE</div>
+          <div class="api-card-url">alphavantage.co</div>
+        </div>
+        <div class="api-card-tier">FREE — 25 CALLS/DAY</div>
+      </div>
+      <div class="api-card-body">
+        <p>Used for forex rates (FX module), macro economic indicators (GDP, CPI, unemployment), and earnings data. The free tier is limited to 25 API calls per day with a rate limit of 5 calls per minute — cache responses in <code>sessionStorage</code> to avoid hitting the limit.</p>
+        <h4>SIGNUP</h4>
+        <pre><code>https://www.alphavantage.co/support/#api-key</code></pre>
+        <h4>KEY ENDPOINTS USED</h4>
+        <table>
+          <thead><tr><th>MODULE</th><th>FUNCTION</th><th>DATA</th></tr></thead>
+          <tbody>
+            <tr><td>News / Macro</td><td><code>REAL_GDP</code></td><td>Quarterly US GDP growth rate</td></tr>
+            <tr><td>News / Macro</td><td><code>CPI</code></td><td>Monthly inflation data</td></tr>
+            <tr><td>News / Macro</td><td><code>UNEMPLOYMENT</code></td><td>Monthly unemployment rate</td></tr>
+            <tr><td>Dashboard</td><td><code>FX_DAILY</code></td><td>Daily forex OHLCV rates</td></tr>
+            <tr><td>Macro Heat Map</td><td><code>REAL_GDP_PER_CAPITA</code></td><td>GDP per capita by country</td></tr>
+          </tbody>
+        </table>
+        <h4>INTEGRATION EXAMPLE</h4>
+        <pre><code><span class="c-com">// Fetch CPI data</span>
+<span class="c-kw">const</span> data = <span class="c-kw">await</span> <span class="c-fn">nexusFetch</span>(
+  `https://www.alphavantage.co/query?function=CPI&interval=monthly&apikey=${NEXUS_API.alphavantage}`,
+  <span class="c-kw">null</span>
+);
+<span class="c-kw">if</span> (data?.data) {
+  <span class="c-kw">const</span> latest = data.data[<span class="c-num">0</span>];  <span class="c-com">// most recent month</span>
+  econ.cpi = <span class="c-fn">parseFloat</span>(latest.value);
+  econ.cpiDate = latest.date;
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- COINGECKO -->
+  <section id="api-coingecko">
+    <div class="section-label">API PROVIDERS</div>
+    <h2>COINGECKO</h2>
+    <div class="api-card">
+      <div class="api-card-header">
+        <div>
+          <div class="api-card-name">COINGECKO</div>
+          <div class="api-card-url">api.coingecko.com</div>
+        </div>
+        <div class="api-card-tier">FREE — NO KEY REQUIRED</div>
+      </div>
+      <div class="api-card-body">
+        <p>Crypto prices, market cap, 24h volume, and historical OHLCV. No API key needed on the free public tier. Rate limit is approximately 10-30 calls per minute. Used to power BTC, ETH, SOL, and other crypto assets in the Dashboard and ticker tape.</p>
+        <h4>KEY ENDPOINTS</h4>
+        <table>
+          <thead><tr><th>PURPOSE</th><th>ENDPOINT</th></tr></thead>
+          <tbody>
+            <tr><td>Current prices (multiple coins)</td><td><code>/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd</code></td></tr>
+            <tr><td>Historical OHLCV for chart</td><td><code>/api/v3/coins/{id}/ohlc?vs_currency=usd&days=30</code></td></tr>
+            <tr><td>Coin details + market data</td><td><code>/api/v3/coins/{id}</code></td></tr>
+          </tbody>
+        </table>
+        <h4>INTEGRATION EXAMPLE</h4>
+        <pre><code><span class="c-com">// No API key needed</span>
+<span class="c-kw">const</span> data = <span class="c-kw">await</span> <span class="c-fn">nexusFetch</span>(
+  <span class="c-str">'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'</span>,
+  <span class="c-kw">null</span>
+);
+<span class="c-kw">if</span> (data) {
+  btcAsset.price = data.bitcoin.usd;
+  btcAsset.chg   = data.bitcoin.usd_24h_change;
+  ethAsset.price = data.ethereum.usd;
+}</code></pre>
+        <div class="callout callout-ok">
+          <div class="callout-title">RECOMMENDED FIRST INTEGRATION</div>
+          <p>CoinGecko is the easiest API to activate — no signup, no key, just uncomment the fetch call. Start here to see live data flowing into the terminal before setting up the other providers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRED -->
+  <section id="api-fred">
+    <div class="section-label">API PROVIDERS</div>
+    <h2>FRED — FEDERAL RESERVE ECONOMIC DATA</h2>
+    <div class="api-card">
+      <div class="api-card-header">
+        <div>
+          <div class="api-card-name">FRED API</div>
+          <div class="api-card-url">fred.stlouisfed.org</div>
+        </div>
+        <div class="api-card-tier">FREE — 120 CALLS/MIN</div>
+      </div>
+      <div class="api-card-body">
+        <p>Official US Federal Reserve economic data. Used by the News & Macro module (economic calendar) and the Macro Heat Map (US macro figures). The free tier allows 120 requests per minute with no daily limit. Each economic data series has a unique series ID.</p>
+        <h4>SIGNUP</h4>
+        <pre><code>https://fred.stlouisfed.org/docs/api/api_key.html</code></pre>
+        <h4>KEY SERIES IDS</h4>
+        <table>
+          <thead><tr><th>SERIES ID</th><th>DATA</th><th>FREQUENCY</th></tr></thead>
+          <tbody>
+            <tr><td><code>GDP</code></td><td>US Gross Domestic Product</td><td>Quarterly</td></tr>
+            <tr><td><code>CPIAUCSL</code></td><td>CPI — All Urban Consumers</td><td>Monthly</td></tr>
+            <tr><td><code>UNRATE</code></td><td>Unemployment Rate</td><td>Monthly</td></tr>
+            <tr><td><code>FEDFUNDS</code></td><td>Federal Funds Effective Rate</td><td>Monthly</td></tr>
+            <tr><td><code>T10Y2Y</code></td><td>10Y-2Y Treasury Yield Spread</td><td>Daily</td></tr>
+            <tr><td><code>DEXUSEU</code></td><td>USD/EUR Exchange Rate</td><td>Daily</td></tr>
+          </tbody>
+        </table>
+        <h4>INTEGRATION EXAMPLE</h4>
+        <pre><code><span class="c-com">// Fetch latest CPI from FRED</span>
+<span class="c-kw">const</span> data = <span class="c-kw">await</span> <span class="c-fn">nexusFetch</span>(
+  `https://api.stlouisfed.org/fred/series/observations?series_id=CPIAUCSL&sort_order=desc&limit=1&api_key=${NEXUS_API.fred}&file_type=json`,
+  <span class="c-kw">null</span>
+);
+<span class="c-kw">if</span> (data?.observations?.[<span class="c-num">0</span>]) {
+  econ.cpi  = <span class="c-fn">parseFloat</span>(data.observations[<span class="c-num">0</span>].value);
+  econ.date = data.observations[<span class="c-num">0</span>].date;
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPENSKY -->
+  <section id="api-opensky">
+    <div class="section-label">API PROVIDERS</div>
+    <h2>OPENSKY NETWORK</h2>
+    <div class="api-card">
+      <div class="api-card-header">
+        <div>
+          <div class="api-card-name">OPENSKY NETWORK</div>
+          <div class="api-card-url">opensky-network.org</div>
+        </div>
+        <div class="api-card-tier">FREE — NO KEY REQUIRED</div>
+      </div>
+      <div class="api-card-body">
+        <p>Real ADS-B flight tracking data. Used by the Aircraft Tracker module. Returns live position, altitude, heading, and speed for all aircraft currently broadcasting ADS-B signals. The anonymous free tier allows 10 API calls per 10 seconds, returning up to 100 aircraft in a bounding box.</p>
+        <h4>INTEGRATION EXAMPLE</h4>
+        <pre><code><span class="c-com">// Fetch all aircraft in a lat/lon bounding box</span>
+<span class="c-kw">const</span> data = <span class="c-kw">await</span> <span class="c-fn">nexusFetch</span>(
+  <span class="c-str">'https://opensky-network.org/api/states/all?lamin=35&lomin=-10&lamax=65&lomax=40'</span>,
+  <span class="c-kw">null</span>
+);
+<span class="c-kw">if</span> (data?.states) {
+  airData = data.states.<span class="c-fn">map</span>(s => ({
+    id:   s[<span class="c-num">1</span>]?.trim(),   <span class="c-com">// callsign</span>
+    lat:  s[<span class="c-num">6</span>],            <span class="c-com">// latitude</span>
+    lon:  s[<span class="c-num">5</span>],            <span class="c-com">// longitude</span>
+    alt:  s[<span class="c-num">7</span>],            <span class="c-com">// altitude (m)</span>
+    hdg:  s[<span class="c-num">10</span>],           <span class="c-com">// true track (degrees)</span>
+    speed: s[<span class="c-num">9</span>],          <span class="c-com">// velocity (m/s)</span>
+  }));
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARINETRAFFIC -->
+  <section id="api-marinetraffic">
+    <div class="section-label">API PROVIDERS</div>
+    <h2>MARINETRAFFIC</h2>
+    <div class="api-card">
+      <div class="api-card-header">
+        <div>
+          <div class="api-card-name">MARINETRAFFIC</div>
+          <div class="api-card-url">marinetraffic.com/api</div>
+        </div>
+        <div class="api-card-tier">PAID — CREDITS SYSTEM</div>
+      </div>
+      <div class="api-card-body">
+        <p>Real-time AIS vessel tracking. Used by the Vessel Tracker module. MarineTraffic uses a credits system rather than a flat monthly fee — each API call consumes credits based on the data returned. A cheaper alternative for development is VesselFinder, which offers a limited free REST API.</p>
+        <h4>ALTERNATIVE — VESSELTRACKER</h4>
+        <pre><code><span class="c-com">// VesselFinder free API (limited vessels, no key needed)</span>
+<span class="c-kw">const</span> data = <span class="c-kw">await</span> <span class="c-fn">nexusFetch</span>(
+  <span class="c-str">'https://www.vesseltracker.com/api/vessels?userkey=YOUR_KEY&lat=51.5&lon=0&radius=100'</span>,
+  <span class="c-kw">null</span>
+);</code></pre>
+        <div class="callout callout-warn">
+          <div class="callout-title">COST NOTE</div>
+          <p>MarineTraffic's API is not free. For a portfolio project, the demo vessel simulation is visually identical to real data. Consider keeping the vessel tracker in demo mode and activating the cheaper APIs (CoinGecko, OpenSky, FRED) first.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- FUNCTIONS -->
+  <section id="functions">
+    <div class="section-label">REFERENCE</div>
+    <h2>KEY FUNCTIONS</h2>
+    <table>
+      <thead><tr><th>FUNCTION</th><th>SIGNATURE</th><th>PURPOSE</th></tr></thead>
+      <tbody>
+        <tr><td><code>switchModule</code></td><td><code>(id, btn)</code></td><td>Activate a module by its HTML id. Handles lazy init, map resizing, and the active tab highlight.</td></tr>
+        <tr><td><code>mkChart</code></td><td><code>(id, config)</code></td><td>Create or replace a Chart.js instance. Automatically destroys the previous chart to prevent canvas leaks.</td></tr>
+        <tr><td><code>nexusFetch</code></td><td><code>(url, fallback)</code></td><td>Fetch with 5s timeout. Returns fallback on any error — the terminal never crashes from a failed API call.</td></tr>
+        <tr><td><code>pushAlert</code></td><td><code>(type, title, body)</code></td><td>Add an item to the alerts panel. Types: <code>'market'</code>, <code>'compliance'</code>, <code>'tracking'</code>.</td></tr>
+        <tr><td><code>rnd</code></td><td><code>(a, b)</code></td><td>Random float between a and b.</td></tr>
+        <tr><td><code>rndInt</code></td><td><code>(a, b)</code></td><td>Random integer between a and b (inclusive).</td></tr>
+        <tr><td><code>pick</code></td><td><code>(array)</code></td><td>Pick a random element from an array.</td></tr>
+        <tr><td><code>buildWatchlist</code></td><td><code>()</code></td><td>Re-render the Dashboard watchlist from current <code>DASH_ASSETS</code> prices.</td></tr>
+        <tr><td><code>runCorrelation</code></td><td><code>()</code></td><td>Compute and render the full correlation matrix for the current ticker set.</td></tr>
+        <tr><td><code>loadOptionsChain</code></td><td><code>()</code></td><td>Load options chain for the symbol in the options input field.</td></tr>
+        <tr><td><code>setMacroMode</code></td><td><code>(mode, btn)</code></td><td>Switch macro heat map metric. Modes: <code>'gdp'</code>, <code>'cpi'</code>, <code>'rate'</code>, <code>'unemp'</code>, <code>'debt'</code>.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CSS VARS -->
+  <section id="css-vars">
+    <div class="section-label">REFERENCE</div>
+    <h2>GLOBAL STATE VARIABLES</h2>
+    <table>
+      <thead><tr><th>VARIABLE</th><th>TYPE</th><th>DESCRIPTION</th></tr></thead>
+      <tbody>
+        <tr><td><code>currentModule</code></td><td>string</td><td>ID of the currently active module. Used by intervals to skip updates when a module is hidden.</td></tr>
+        <tr><td><code>DASH_ASSETS</code></td><td>Array</td><td>Master list of 25 tradable assets. Each object has: sym, name, type, price, chg, vol, mktcap, rsi, ma20, signal.</td></tr>
+        <tr><td><code>PORTFOLIO_D</code></td><td>Array</td><td>Demo portfolio positions. Each: sym, shares, avgCost. Prices resolved dynamically from DASH_ASSETS.</td></tr>
+        <tr><td><code>airData</code></td><td>Array</td><td>Current aircraft objects for the map. Regenerated every 4 seconds.</td></tr>
+        <tr><td><code>vesData</code></td><td>Array</td><td>Current vessel objects for the map. Regenerated every 4 seconds.</td></tr>
+        <tr><td><code>optionsData</code></td><td>Array</td><td>Current options chain rows. Updated on symbol change or expiry change.</td></tr>
+        <tr><td><code>dpFlowData</code></td><td>Array</td><td>Dark pool flow tape. New trades prepended every 4 seconds, capped at 200 rows.</td></tr>
+        <tr><td><code>corrTickers</code></td><td>Array</td><td>Active tickers in the Correlation Lab. Max 8.</td></tr>
+        <tr><td><code>chartInstances</code></td><td>Object</td><td>Registry of all live Chart.js instances keyed by canvas id. Used by <code>mkChart</code> for cleanup.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- EXTENDING -->
+  <section id="extending">
+    <div class="section-label">REFERENCE</div>
+    <h2>ADDING A NEW MODULE</h2>
+    <p>Follow this exact pattern to add a new module without breaking any existing functionality.</p>
+
+    <h3>STEP 1 — ADD THE NAV BUTTON</h3>
+    <pre><code><span class="c-com">&lt;!-- Inside the relevant .nav-group in .master-nav --&gt;</span>
+&lt;button class="mtab" onclick="<span class="c-fn">switchModule</span>(<span class="c-str">'mymodule'</span>, this)"&gt;MY MODULE&lt;/button&gt;</code></pre>
+
+    <h3>STEP 2 — ADD THE HTML PANEL</h3>
+    <pre><code><span class="c-com">&lt;!-- Inside .app, after the last existing module --&gt;</span>
+&lt;div class="module" id="mymodule"&gt;
+  <span class="c-com">&lt;!-- your module content --&gt;</span>
+&lt;/div&gt;</code></pre>
+
+    <h3>STEP 3 — ADD THE INIT FLAG AND FUNCTION</h3>
+    <pre><code><span class="c-kw">let</span> mymoduleInitialized = <span class="c-kw">false</span>;
+
+<span class="c-kw">function</span> <span class="c-fn">initMyModule</span>() {
+  <span class="c-com">// build your module's content here</span>
+  <span class="c-com">// set up any intervals, charts, or event listeners</span>
+}</code></pre>
+
+    <h3>STEP 4 — REGISTER IN SWITCHMODULE</h3>
+    <pre><code><span class="c-com">// Inside the switchModule() function, add one line:</span>
+<span class="c-kw">if</span> (id === <span class="c-str">'mymodule'</span> && !mymoduleInitialized) {
+  <span class="c-fn">setTimeout</span>(() => { <span class="c-fn">initMyModule</span>(); mymoduleInitialized = <span class="c-kw">true</span>; }, <span class="c-num">80</span>);
+}</code></pre>
+
+    <div class="callout callout-info">
+      <div class="callout-title">CHARTS IN NEW MODULES</div>
+      <p>Always use <code>mkChart(canvasId, config)</code> rather than <code>new Chart()</code> directly. The helper tracks and destroys previous instances, preventing the "canvas already in use" error that occurs when a user navigates away and back to a module.</p>
+    </div>
+  </section>
+
+  <!-- TROUBLESHOOTING -->
+  <section id="troubleshooting">
+    <div class="section-label">REFERENCE</div>
+    <h2>TROUBLESHOOTING</h2>
+
+    <h3>TABS / BUTTONS NOT WORKING</h3>
+    <p>This is almost always a JavaScript error that silently halts execution. Open the browser console (F12 > Console) and look for red errors. Common causes: a syntax error in an added code block, or a missing DOM element that a function tries to manipulate on boot.</p>
+
+    <h3>MAPS NOT RENDERING</h3>
+    <p>The Leaflet map modules use <code>requestAnimationFrame</code> to defer initialization. If the map appears blank, call <code>trackMap.invalidateSize()</code> after the container becomes visible. This is already handled in <code>switchModule</code> for the built-in map modules.</p>
+
+    <h3>CHARTS NOT UPDATING</h3>
+    <p>If a chart stops refreshing, check that <code>currentModule</code> matches the module's ID string exactly. A typo in the module ID string will cause all <code>setInterval</code> guards for that module to silently skip.</p>
+
+    <h3>API CALLS FAILING SILENTLY</h3>
+    <p>All API failures fall back to demo data via <code>nexusFetch</code> — the terminal won't show an error. Add a <code>console.log</code> in the catch block of <code>nexusFetch</code> or open the Network tab in DevTools to see the actual HTTP response and status code.</p>
+
+    <h3>CORS ERRORS ON LOCAL FILE</h3>
+    <p>Browsers block cross-origin requests from <code>file:///</code>. Run a local server:</p>
+    <pre><code><span class="c-com"># Python 3</span>
+python3 -m http.server 8080
+
+<span class="c-com"># Node (npx)</span>
+npx serve .
+
+<span class="c-com"># Then open:</span>
+http://localhost:8080/Nexus_v5.html</code></pre>
+
+    <h3>OPTIONS CHAIN SHOWS NO DATA</h3>
+    <p>Enter a ticker that exists in <code>DASH_ASSETS</code> (AAPL, MSFT, NVDA, TSLA, etc.). The options chain generator uses the asset's price from that array. An unknown ticker will still work but will generate a chain around a randomly chosen price.</p>
+
+    <div class="callout callout-ok">
+      <div class="callout-title">DEVTOOLS WORKFLOW</div>
+      <p>The most useful DevTools panel for debugging Nexus is the Console (for JS errors) combined with the Network tab (for API calls). Filter the Network tab by <code>Fetch/XHR</code> to see only the API requests and their response status codes.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// Sidebar active link highlight on scroll
+const sections = document.querySelectorAll('[id]');
+const links = document.querySelectorAll('.sb-link');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.sb-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
