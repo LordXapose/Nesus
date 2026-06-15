@@ -41,8 +41,3 @@
 ### Installation
 1. **Clone or download** this repository.
 2. **Open `index.html`** in your browser no build step or server required.
-
-```bash
-[git clone https://github.com/LordXapose/Nesus]
-cd nexus-terminal
-open index.html
