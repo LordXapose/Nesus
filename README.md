@@ -43,6 +43,6 @@
 2. **Open `index.html`** in your browser no build step or server required.
 
 ```bash
-git clone https://github.com/yourusername/nexus-terminal.git
+[git clone https://github.com/LordXapose/Nesus]
 cd nexus-terminal
 open index.html
