@@ -1,183 +1,155 @@
-# NEXUS TERMINAL – Institutional-Grade Financial Suit
+# Nexus
 
-**NEXUS TERMINAL** is a full‑featured, Bloomberg‑style front‑end application that combines real‑time market data, advanced risk analytics (inspired by BlackRock Aladdin), global asset tracking (ADS‑B aircraft + AIS vessels), options flow, dark pool prints, macro heat maps, correlation analysis and a built‑in AI analyst. It is entirely client‑side and uses realistic mock data by default, with optional plug‑ins for live financial APIs
+A single-file, Bloomberg Terminal–style financial dashboard built in vanilla JavaScript. No backend, no build step, no framework — open the HTML file and it runs.
 
----
+![Nexus Terminal](https://img.shields.io/badge/status-active-brightgreen) ![No Build](https://img.shields.io/badge/build-none-blue) ![Dependencies](https://img.shields.io/badge/dependencies-CDN%20only-orange)
 
-## Key Features
+## What this is
 
-### Market & Order Book
-- **Live watchlist** (equities, crypto, forex) with 1.5‑2.5s tick simulation
-- **Interactive price charts** (1D/1W/1M/3M/1Y/5Y)
-- **Level 2 order book** – 20‑level bid/ask ladder, depth chart (cumulative volume), time & sales tape
-- **Portfolio tracker** – positions, P&L, allocation pie, sector exposure
-- **Screener** – filter by asset class, signal (buy/hold/sell), price change
+Nexus is a 29-module market terminal covering equities, options, fixed income, commodities, crypto, portfolio analytics, sentiment, and geopolitical risk. Everything — markup, styles, and logic — lives in one `.html` file. There is no Python backend, no Node server, no database. The "architecture" is a browser tab.
 
-### Global Tracking (ADS‑B + AIS)
-- **80 aircraft** – live positions, altitude, speed, squawk, registration, passenger count, airline, aircraft type (B777, A380, etc.)
-- **120 vessels** – IMO/MMSI, flag, draft, beam, tonnage, cargo manifest, port ETA
-- **Dedicated map views** for aircraft and vessels with category filters (cargo, tanker, container, bulk)
-- **Alert system** – detects delayed flights, vessel distress signals, and compliance breaches
+This makes it trivially portable: download the file, double-click it, and the terminal boots. It also makes it a useful teaching artifact for demonstrating that a serious-looking financial dashboard doesn't require a server stack to be functional — most of what people associate with a "terminal" is UI density and data modeling, not backend complexity.
 
-### Aladdin‑Style Risk Engine
-- **VaR 99% / CVaR** – historical simulation with 20,000‑path Monte Carlo (GBM, jump‑diffusion, GARCH)
-- **8 historical stress scenarios** – 2008 financial crisis, COVID‑19, 2022 rate hike, soft landing, etc.
-- **12‑factor decomposition** – market beta, momentum, value, quality, interest rate, credit, FX, commodity, liquidity, idiosyncratic
-- **Brinson attribution** – allocation, selection and interaction effects
-- **48 compliance rules** – position / sector / country limits, cash minimum, leverage, ESG score, real‑time breach monitoring
+## Why no backend
 
-### Advanced Market Modules
-- **Options Chain** – strike, bid/ask, IV, delta, open interest, volume, max pain, put/call ratio
-- **Dark Pool & Unusual Options** – sweep/block trades, bullish/bearish sentiment, premium heat map
-- **Macro Heat Map** – GDP, CPI, policy rate, unemployment, debt/GDP for 20+ countries with regional averages
-- **Correlation Lab** – dynamic correlation matrix, rolling 30D correlations, diversification score
-- **Yield Curve** – US Treasury curve with 1Y / 2Y / pre‑2008 overlays, spread history
-- **Commodities Dashboard** – energy, metals, agriculture with price charts
-- **On‑Chain Analytics** – BTC MVRV, NVT, exchange flows, active addresses, miner revenue
+This was a deliberate choice, not a missing piece:
 
-### News & Macro
-- **News feed** with impact rating (high/medium/low), ticker tagging, and full article view
-- **Economic calendar** – upcoming releases (CPI, NFP, GDP, central bank meetings)
-- **Earnings calendar** – actual vs estimate, surprise %, stock reaction
-- **Central banks** – policy rates, meeting minutes, forward guidance for Fed, ECB, BoE, BoJ, PBOC
+- **Zero deployment friction.** No server to provision, no API to keep alive, no database migrations. The file is the artifact.
+- **Demo-data by default, live-data when you want it.** Every module ships with a realistic synthetic data generator so the terminal is fully interactive out of the box. Swapping in a real market data API is a one-line change per module (see [Connecting Real Data](#connecting-real-data) below).
+- **Forces good separation of concerns anyway.** Even without a server, the file is organized so that data fetching, data shaping, and rendering are distinct functions — which is what makes it easy to point at a real backend later if you build one.
 
-### Additional Intelligence Modules
-- Short interest monitor (squeeze score, days‑to‑cover, borrow rate)
-- Insider transactions (SEC Form 4) – buys/sells by CEO/CFO/directors
-- Fear & Greed Index, VIX term structure, put/call ratio history
-- Social sentiment – Reddit/Twitter mentions, bullish/bearish signals, price divergences
-- Sector rotation – ETF performance across 11 sectors, economic cycle clock
-- Fixed income screener (IG/HY, municipal bonds, yield to maturity, duration)
-- Portfolio backtester, options P&L calculator, tax lot tracker (FIFO/LIFO/HIFO)
+If you do want a real backend (e.g. to cache API responses, manage rate limits, or add auth), the natural shape would be: a thin Python (FastAPI/Flask) proxy that wraps Polygon/Alpha Vantage/FRED/CoinGecko, normalizes the JSON, and serves it to this same frontend unchanged. That isn't implemented here, but the `nexusFetch()` pattern described below is designed to make that swap painless.
 
-### AI Analyst Overlay
-- Press `AI ANALYST` in the top‑right corner to open a chat window
-- The AI has full context of your portfolio, risk metrics, factor exposures, stress tests, compliance breaches and tracking data
-- Powered by **Claude Sonnet** (Anthropic) – requires an API key for production use (mock responses in demo)
+## Quick start
 
-### Live Alert System
-- Custom price alerts (above/below threshold)
-- Compliance breach alerts, market volatility alerts, tracking alerts
-- Persistent panel with real‑time notifications
+```bash
+git clone https://github.com/LordXapose/nexus.git
+cd nexus
+open Nexus_v5.html   # macOS
+# or just double-click the file in Finder / Explorer
+```
 
----
+No `npm install`. No `pip install`. No `.env` file required to see the UI working with demo data.
 
-## Technology Stack
+## Architecture
 
-| Area | Libraries / Tools |
-|------|-------------------|
-| **Core** | HTML5, CSS3 (CSS Grid, Flexbox), ES6+ JavaScript |
-| **Charts** | [Chart.js 4.4.1](https://www.chartjs.org/) |
-| **Maps** | [Leaflet 1.9.4](https://leafletjs.com/) + OpenStreetMap tiles |
-| **Fonts** | Google Fonts – Share Tech Mono, Orbitron |
-| **Icons** | UTF‑8 symbols / emojis (lightweight, no external icon packs) |
-| **Data** | Client‑side mock data generators (realistic ticker simulation, ocean lane interpolation, flight paths) |
-| **External APIs** *(optional)* | Polygon.io (stocks/options), Alpha Vantage (macro/FX), FRED (economic data), CoinGecko (crypto) |
+### Single-file structure
 
----
+```
+Nexus_v5.html
+├── <style>   ~500 lines   — CSS custom properties (design tokens), layout, component classes
+├── <body>    ~3300 lines  — 29 module panels, each a <div class="module" id="...">
+└── <script>  ~2500 lines  — state, utilities, per-module init/render functions, boot sequence
+```
 
-## 🛠️ How to Run
+### Module system
 
-1. **Download** the `index.html` file (or copy the complete code into a local `.html` file).
-2. **Serve it locally** – because Leaflet tiles and optional API calls require a web server context:
-   ```bash
-   # Using Python 3
-   python -m http.server 8000
-   # or use VS Code Live Server extension
-   ```
-3. **Open** `http://localhost:8000` in your browser (Chrome / Firefox / Edge recommended).
-4. **No build step** – everything runs out of the box.
+Every screen in Nexus is a `div.module` element. Exactly one is visible at a time via a `.active` class toggle. Navigation buttons in the top bar call a single router:
 
- The application uses **mock data** by default. All market prices, aircraft/vessel positions, options chains, dark pool prints and risk metrics are procedurally generated for demonstration purposes.
+```js
+function switchModule(id, btn) {
+  document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.mtab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
 
----
+  // lazy init — each module only builds its DOM/charts the first time it's opened
+  if (id === 'earnings' && !earningsInit) {
+    setTimeout(() => { initEarnings(); earningsInit = true; }, 80);
+  }
+  // ...repeated for all 29 modules
+}
+```
 
-## API Integration (Live Data)
+Lazy initialization means the terminal boots instantly regardless of module count — nothing renders until you click it, and each module only ever initializes once per session (tracked with a boolean flag like `earningsInit`).
 
-To replace mock data with real market feeds, edit the `NEXUS_API` object near the top of the `<script>` section:
+### Design system
 
-```javascript
+All visual styling routes through CSS custom properties so the whole terminal can be re-themed by changing a handful of values:
+
+```css
+--bg, --bg2, --bg3, --bg4, --bg5      /* background depth scale */
+--amber, --green, --red, --blue, --purple   /* semantic accent colors */
+--text, --text2, --text3, --text4     /* text hierarchy */
+--border, --border2, --border3        /* dividers */
+```
+
+Typography: `Orbitron` for display/headers, `Share Tech Mono` for tabular UI — both loaded from Google Fonts via CDN.
+
+### Shared utilities
+
+A small set of helper functions is reused across every module to keep the code consistent:
+
+| Function | Purpose |
+|---|---|
+| `rnd(a, b)` / `rndInt(a, b)` | Random float/int generators for synthetic data |
+| `pick(arr)` | Random array element |
+| `mkChart(id, config)` | Wraps Chart.js — destroys any existing chart on that canvas before creating a new one, so re-rendering a module never leaks chart instances |
+| `mkKpi(el, items)` | Renders a row of KPI tiles from a `[label, value, className]` array |
+| `drow(label, value, className)` | Renders a single label/value data row (used in every sidebar panel) |
+| `fmtM(n)` | Formats large numbers as `$1.2M` / `$3.4B` |
+| `nexusFetch(url, fallback)` | Fetches a real API with a 5-second timeout, falling back to demo data automatically if the request fails or no key is configured |
+| `pushAlert(type, title, body)` | Pushes a toast-style alert into the global alert feed |
+
+### Data flow per module
+
+Every module follows the same three-part pattern:
+
+1. **`initModuleName()`** — runs once on first visit. Generates or fetches the dataset, computes KPIs, and calls the initial render.
+2. **`renderModuleName()`** / **`filterX()`** / **`setXMode()`** — re-renders the module's DOM and charts in response to filter buttons, dropdowns, or input changes, without re-fetching data.
+3. **Chart.js canvases** — each chart lives in a named `<canvas>` and is built/rebuilt through `mkChart()`.
+
+This means adding a new module is mechanical: write an `init`, optionally a `render`/`filter`, drop a `div.module` panel in the body, add one nav button, and register one line in `switchModule()`.
+
+## Modules (29 total, across 10 navigation groups)
+
+**Home** — Overview dashboard with live market summary cards
+
+**Markets** — Dashboard (25-asset live ticker grid), Order Book, News & Macro
+
+**Global Tracking** — All Traffic (Leaflet map), Aircraft tracking, Vessel tracking
+
+**Risk & Analytics** — Aladdin-style Risk Overview, Stress Testing, Compliance monitoring, Monte Carlo simulation
+
+**New Modules** — Options Chain (live Greeks, IV), Dark Pool flow tape, Macro Heat Map (20 countries), Correlation Lab (N×N matrix)
+
+**Intelligence** — Earnings Calendar, Short Interest / Squeeze Monitor, Insider Transactions (SEC Form 4 style), Sentiment Dashboard (Fear & Greed, VIX term structure, put/call ratio, AAII survey), Social Sentiment / Trending Tickers, Sector Rotation (with an economic cycle clock)
+
+**Fixed Income** — US Treasury Yield Curve (with historical overlays), Bond Screener, Credit Spreads (IG/HY OAS vs equity drawdown)
+
+**Commodities** — Energy/Metals/Agriculture dashboard, BTC On-Chain Analytics (MVRV, NVT, exchange netflow), Futures Curve (contango/backwardation across 6 commodities)
+
+**Portfolio** — Backtester (allocation vs benchmark, Sharpe/Sortino/Calmar, drawdown), Options P&L Calculator (8 strategies, Black-Scholes pricing), Tax Lot Tracker (FIFO/LIFO/HIFO, wash sale detection)
+
+**Global** — Geopolitical Risk Monitor (12 countries, click-through detail), Global Trade Flow corridors and chokepoints, FX Intervention Tracker
+
+## Connecting real data
+
+Every module that pulls market data is set up to call `nexusFetch()` against a real provider and fall back to its synthetic generator automatically if no API key is configured. To go live, edit the config block near the top of the `<script>` tag:
+
+```js
 const NEXUS_API = {
-  polygon: 'DEMO',      // https://polygon.io/dashboard/signup (free tier available)
-  alphavantage: 'DEMO', // https://www.alphavantage.co/support/#api-key (free tier)
-  coingecko: '',        // no key required for CoinGecko
-  fred: 'DEMO',         // https://fred.stlouisfed.org/docs/api/api_key.html
+  polygon: 'YOUR_KEY',       // polygon.io — equities, options
+  alphavantage: 'YOUR_KEY',  // alphavantage.co — equities, fundamentals
+  coingecko: '',             // no key required — crypto
+  fred: 'YOUR_KEY',          // fred.stlouisfed.org — yields, macro series
 };
 ```
 
-- **Polygon.io** – stocks, options, forex, crypto (used for order book, options chain, correlation lab)
-- **Alpha Vantage** – macroeconomic indicators (CPI, GDP, unemployment, central bank rates)
-- **FRED** – alternative for yield curve, credit spreads, reserves data
-- **CoinGecko** – on‑chain metrics (MVRV, NVT, miner revenue)
+Each module has a commented-out real API call directly above its mock data generator — uncomment the real call, delete (or keep as a fallback) the mock line, and that module goes live. No other code changes required.
 
-> The application includes **fetch wrappers** with timeouts and fallback to mock data when keys are `'DEMO'` or missing. Replace the placeholders with your own keys to enable live data.
+## Tech stack
 
----
+- **Vanilla JavaScript** (ES6+, no framework, no transpilation)
+- **[Chart.js 4.4.1](https://www.chartjs.org/)** — all line/bar/doughnut charts, loaded via CDN
+- **[Leaflet 1.9.4](https://leafletjs.com/)** — map-based tracking modules, loaded via CDN
+- **Google Fonts** — Orbitron, Share Tech Mono
+- **No build tooling** — no Webpack, no Vite, no npm dependencies at all
 
-## Project Structure (Single File)
+## Project status
 
-The entire application is contained in one **`index.html`** file, organised into:
-
-- **CSS** – dark/light theme, responsive grid layouts, map legend, custom scrollbars
-- **HTML** – top bar, master navigation, 40+ module containers (hidden by default, activated via JS)
-- **JavaScript** – all logic:
-  - Navigation (`switchModule`, `switchRiskTab`, `showDashPanel`)
-  - Mock data generators (`genAircraft`, `genVessels`, `genOptionsChain`, `genDPFlow`)
-  - Chart initialisation (Chart.js + destroy routines)
-  - Leaflet map handlers (aircraft/vessels markers, ocean lane interpolation)
-  - Risk engine functions (`runMonteCarlo`, `renderScenarioDetail`, `buildCompliance`)
-  - Alert system & AI chat overlay
-  - Portfolio editor (add/remove positions, recalculate P&L)
-
----
-
-## Data & Mock Behaviour
-
-- **Ticker simulation** – prices change every 2–3 seconds using a bounded random walk (daily moves simulated intraday).
-- **Aircraft & vessels** – positions are updated every 4 seconds: aircraft move linearly along great‑circle routes; vessels advance along predefined shipping lanes (`OCEAN_LANES` array covering North Atlantic, South Atlantic, Mediterranean, Suez, Indian Ocean, Trans‑Pacific, West/East Africa, etc.).
-- **Order book** – 20 levels of bids/asks are regenerated based on the current price with realistic spreads and size distributions.
-- **Options chain** – strikes are generated around the current price; IV, delta, and OI are calculated using a simplified Black‑Scholes approximation.
-- **Risk metrics** – VaR, CVaR, factor exposures, stress impacts and Monte Carlo simulations are computed on‑the‑fly using standard financial formulas (historical simulation, GBM, jump‑diffusion).
-
----
-
-## Demo Credentials / No Login Required
-
-The terminal runs **100% client‑side** without any backend or authentication. All features are available immediately – you can edit the portfolio, set price alerts, run stress tests, and explore every module.
-
----
+This is an active personal project, primarily a portfolio piece demonstrating financial domain modeling (options pricing, fixed income math, portfolio risk metrics) and dense, information-rich UI engineering without backend complexity getting in the way. Contributions, issues, and forks welcome.
 
 ## License
 
-This project is released under the **MIT License**. You are free to use, modify, and distribute it for personal or commercial purposes, provided that the original copyright notice is included.
-
----
-
-## Contributing
-
-Contributions are welcome – feel free to submit issues or pull requests to:
-- Add new data adapters for additional APIs (e.g., Binance, Yahoo Finance)
-- Improve risk model accuracy (GARCH calibration, copula‑based VaR)
-- Extend tracking module with real ADS-B/AIS feeds (using public APIs like OpenSky, VesselFinder)
-- Enhance the AI analyst prompt with more portfolio context
-
----
-
-## Acknowledgements
-
-- **Chart.js** for lightweight, responsive charts
-- **Leaflet** & **OpenStreetMap** for mapping infrastructure
-- **Google Fonts** for the terminal‑inspired typefaces
-- **Anthropic** for the Claude API (AI analyst chat)
-- All data providers (Polygon.io, Alpha Vantage, FRED, CoinGecko) for their generous free tiers
-
----
-
-## Disclaimer
-
-This software is provided for **educational and demonstration purposes only**. It does not constitute financial advice, and you should not make real trading decisions based on the simulated data. Past performance does not guarantee future results. Use of any external API is subject to that service’s terms of use and rate limits.
-
----
-
-**Built with ❤️ for quants, traders, and data enthusiasts.**  
-*NEXUS – Your Window into Global Markets.*
+MIT — do whatever you want with it.
